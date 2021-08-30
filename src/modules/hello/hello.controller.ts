@@ -1,9 +1,12 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { RolesGuard } from './../guards/roles.guards';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiHeader, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { HelloService } from './hello.service'
+import { Roles } from '../decorators/roles.decorator'
 
 @Controller('hello')
 @ApiTags('hello Api')
+@UseGuards(RolesGuard)
 export class HelloController {
   constructor(private readonly helloService: HelloService) {}
 
@@ -52,5 +55,13 @@ export class HelloController {
   pipeTest(@Query('id', new ParseIntPipe()) id: number) {
     console.log(id);
     console.log(typeof id);
+  }
+
+  @Post('/roles')
+  @Roles('admin')
+  @ApiBody({ required: true })
+  roleGuard(@Body() { roles }) {
+    console.log(roles);
+    return 'success';
   }
 }
