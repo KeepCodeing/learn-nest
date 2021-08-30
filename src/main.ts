@@ -1,3 +1,4 @@
+import { GlobalExceptionFilter } from './modules/exceptions/http-exception';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -6,6 +7,7 @@ declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);  
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
   if (module.hot) {
     module.hot.accept();
