@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiBody, ApiHeader, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { HelloService } from './hello.service'
 
@@ -45,5 +45,12 @@ export class HelloController {
   @ApiBody({ description: 'name body' })
   patchHello(@Param() { id }, @Body() { name }) {
     return this.helloService.update({ id, name });
+  }
+
+  @Get('/pipe')
+  @ApiQuery({ name: 'id', required: true })
+  pipeTest(@Query('id', new ParseIntPipe()) id: number) {
+    console.log(id);
+    console.log(typeof id);
   }
 }
